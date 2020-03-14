@@ -171,34 +171,38 @@ def NewUserDevice(listDevice):
     # listDevice = ["BT05", "BT06", "BT07"]
     # listUser = ["Mathieu", "Clement", "Gabriel"]
     #
-    # def addListDevice():
-    #     listBoxLeft.delete(0, 'end')
-    #     #indexDevice = 0
-    #
-    #     for i in listDevice:
-    #         listBoxLeft.insert(listBoxLeft.size(), i[2] + ' ' + i[1])
-            #indexDevice += 1
+    def addListDevice(listDevice):
+        listBoxLeft.delete(0, 'end')
+        for device in listDevice:
+            listBoxLeft.insert(listBoxLeft.size(), str(device[0]) + ' ' + device[1])
 
     def addListUser():
         listBoxRight.delete(0, 'end')
         #indexUser = 0
 
-        for i in listUser:
-            listBoxRight.insert(listBoxRight.size(), i[3] + ' ' + i[4])
+        for userID in listUser:
+            listBoxRight.insert(listBoxRight.size(), userID[3] + ' ' + userID[4])
             #indexUser += 1
 
     TableauRelation = []
 
-    def scanDevice(listDevice):
-        for i in listDevice:
-            listBoxLeft.insert(listBoxLeft.size(), str(i[0]) + ' ' + i[1])
 
     def addListRelation():
         print(str(IndexDevice) + " / " + str(IndexUser))
-        DeviceValue = str(listDevice[IndexDevice][1])
-        UserValue = str(listUser[IndexUser][3])
-        MaChaine = DeviceValue + " " + UserValue
+        DeviceValue = str(listDevice[IndexDevice][0])
+        DeviceMac = str(listDevice[IndexDevice][1])
+        UserLastName = str(listUser[IndexUser][1])
+        UserName = str(listUser[IndexUser][2])
+        UserValue = str(listUser[IndexUser][0])
+        MaChaine ="Name :" + DeviceValue + " MAC : " + DeviceMac + "User ID :" + UserValue + " UserName :"+ UserName + "UserLastName :" + UserLastName
         listBoxBottom.insert(listBoxBottom.size(), MaChaine)
+
+    def requeteSQL():
+        cursor = con.cursor()
+        for i in listBoxBottom:
+            sql = 'INSERT INTO Device (MacAddr, Name, IDUser) VALUES ("' + i[1] + '", "' + i[0] + '", "' + i[2] + '")'
+            commit(cursor, sql)
+            print(sql)
 
     # Concatenation Button
     btnValidationDeviceName = Button(frame, text='Create', command=addListRelation, width=7)
@@ -207,14 +211,13 @@ def NewUserDevice(listDevice):
     btnValidationDeviceName.config(font=("Helvetica", 15), bg='#1A90DB', fg='white', highlightbackground="#2B2B2B")
 
     # Script SQL button
-    btnScriptSQL = Button(frame, text='Script SQL', command="", width=9)
+    btnScriptSQL = Button(frame, text='Script SQL', command=requeteSQL, width=9)
     btnScriptSQL.pack(side=LEFT)
     btnScriptSQL.place(x="175", y="360")
     btnScriptSQL.config(font=("Helvetica", 15), bg='#1A90DB', fg='white', highlightbackground="#2B2B2B")
 
-    #addListDevice()
+    addListDevice(listDevice)
     addListUser()
-    scanDevice(listDevice)
     window.mainloop()
 
 def Formulaire():
