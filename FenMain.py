@@ -184,7 +184,7 @@ def NewUserDevice(listDevice):
             listBoxRight.insert(listBoxRight.size(), userID[3] + ' ' + userID[4])
             #indexUser += 1
 
-    TableauRelation = []
+    ListRelation = []
 
 
     def addListRelation():
@@ -195,14 +195,18 @@ def NewUserDevice(listDevice):
         UserName = str(listUser[IndexUser][2])
         UserValue = str(listUser[IndexUser][0])
         MaChaine ="Name :" + DeviceValue + " MAC : " + DeviceMac + "User ID :" + UserValue + " UserName :"+ UserName + "UserLastName :" + UserLastName
+        DeviceUser = (DeviceValue,DeviceMac,UserValue)
+        ListRelation.append(DeviceUser)
         listBoxBottom.insert(listBoxBottom.size(), MaChaine)
+
 
     def requeteSQL():
         cursor = con.cursor()
-        for i in listBoxBottom:
+        print(ListRelation)
+        for i in ListRelation:
             sql = 'INSERT INTO Device (MacAddr, Name, IDUser) VALUES ("' + i[1] + '", "' + i[0] + '", "' + i[2] + '")'
-            commit(cursor, sql)
             print(sql)
+            commit(cursor, sql)
 
     # Concatenation Button
     btnValidationDeviceName = Button(frame, text='Create', command=addListRelation, width=7)
